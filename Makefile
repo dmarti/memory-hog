@@ -17,6 +17,7 @@ pre-commit :
 	git diff-index --check HEAD
 
 clean :
-	find . -print0 | git check-ignore -z --stdin | xargs -0 rm -f
+	find . -path ./.git -prune -o -print0 | \
+	git check-ignore -z --stdin | xargs -0 rm -f
 
 .PHONY : all clean hooks
