@@ -32,6 +32,7 @@ void hog_memory() {
 
 extern void *osv_register_shrinker(const char *, size_t (*)(size_t, bool));
 
+// TODO: Add an example where the hard parameter is taken into account.
 size_t shrinker_function(size_t target, bool hard)
 {
     size_t freed = 0;
