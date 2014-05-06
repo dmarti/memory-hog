@@ -4,13 +4,31 @@ memory-hog
 Hey, kids, let's learn OSv's shrinker API!
 
 If you're writing a program that keeps a cache,
-you're probaly expecting users to have to set the
+you're probably expecting users to have to set the
 cache size, which means a configuration setting
 or command-line argument.  And every configuration
 setting or command-line argument is something that
 you have to document, or explain to users when they
 get it wrong.
 
+Thankfully, there's an easier way.  With OSv,
+you can ask the OS to let your program know
+when memory is tight, so that you can manage
+the cache size on the fly.  Less settings
+tweaking, more items kept in cache, what's not
+to like? (There is a [mechanism for memory pressure
+notifications](https://www.kernel.org/doc/Documentation/cgroups/memory.txt)
+on Linux, but it's somewhat complex.
+
+On OSv, it's a callback model: you just set up a
+shrinker callback and register it.
+
+
+Defining a shrinker function
+----------------------------
+
+OSv notifies your program of a low memory situation by
+calling a shrinker function.
 
 A shrinker function takes two arguments:
 
@@ -18,19 +36,24 @@ A shrinker function takes two arguments:
 
  * "hard" -- false if this is a preemptive freeing of
    memory, true if the system is under severe
-   pressure.
+   pressure (bool).
 
 
-For C applications, or C++ applications that are built without access to OSv headers, registering a shrinker involves calling the following function:
+Registering
+-----------
 
-'''
+Now that the shrinker is defined, you need to register it.
+
+Registering a shrinker involves calling `osv_register_shrinker`:
+
+```
 void *osv_register_shrinker(const char *name,
                             size_t (*func)(size_t target, bool hard));
-'''
+```
 
 An application in C can just do:
 
-'''
+```
 extern void *osv_register_shrinker(const char *name,
                             size_t (*func)(size_t target, bool hard));
 
@@ -40,5 +63,14 @@ int main () {
   ...
   return 0;
 }
-'''
+```
+
+Concurrency
+-----------
+
+TODO: shrinker callbacks can be called any time (?)
+
+TODO: concurrency considerations -- treat like signal handlers (?)
+
+TODO: just set a global "target" in the callback, process in main loop?
 

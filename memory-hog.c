@@ -37,7 +37,7 @@ size_t shrinker_function(size_t target, bool hard)
 {
     size_t freed = 0;
     struct item * thing = tail;
-
+    printf("shrinker: processing request to free %08d bytes.\n", target);
     while (thing != NULL && freed <= target) {
         thing->prev->next = NULL;
         tail = thing->prev;
