@@ -22,7 +22,7 @@ clean :
 	which git &> /dev/null
 	find . -path ./.git -prune -o -print0 | \
 	git check-ignore -z --stdin | xargs -0 rm -f
-	find . -mindepth 1 -type d -print0 | \
+	find . -depth -mindepth 1 -type d -print0 | \
 	xargs -0 rmdir --ignore-fail-on-non-empty
 
 .PHONY : all clean hooks
