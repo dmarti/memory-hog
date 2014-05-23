@@ -67,10 +67,12 @@ int main () {
 
 Concurrency
 -----------
+Shrinker callbacks conceptually works like asynchronous signal handlers,
+eventually handling specific events.
+OSv asserts that shrinker callbacks will never be executed concurrently, 
+therefore, there is no concurrency consideration.
 
-TODO: shrinker callbacks can be called any time (?)
-
-TODO: concurrency considerations -- treat like signal handlers (?)
-
-TODO: just set a global "target" in the callback, process in main loop?
+TODO list
+-----------
+- just set a global "target" in the callback, process in main loop?
 
