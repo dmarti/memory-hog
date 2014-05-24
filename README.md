@@ -68,9 +68,16 @@ int main () {
 Concurrency
 -----------
 
-TODO: shrinker callbacks can be called any time (?)
+Shrinker callbacks conceptually work like asynchronous signal handlers,
+i.e. eventually handling specific events.
 
-TODO: concurrency considerations -- treat like signal handlers (?)
+Each cache in your program that the shrinker can release data from,
+must have its own lock to prevent concurrency issues.
 
-TODO: just set a global "target" in the callback, process in main loop?
+In doubt, check memory-hog code to see how to deal with concurrency.
+
+TODO list
+-----------
+
+ * just set a global "target" in the callback, process in main loop?
 
