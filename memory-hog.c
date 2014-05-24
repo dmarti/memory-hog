@@ -7,7 +7,6 @@
 
 struct item {
     char stuff[SIZE];
-    struct item * prev;
     struct item * next;
 };
 
@@ -18,12 +17,10 @@ void hog_memory() {
     struct item * thing;
     thing = malloc(sizeof(struct item));
     if (tail) {
-        thing->prev = tail;
         tail->next = thing;
         tail = thing;
     } else {
         head = thing;
-        head->prev = NULL;
         tail = thing;
     }
     printf("Oink!\n");
@@ -36,14 +33,13 @@ extern void *osv_register_shrinker(const char *, size_t (*)(size_t, bool));
 size_t shrinker_function(size_t target, bool hard)
 {
     size_t freed = 0;
-    struct item * thing = tail;
+    struct item * thing = head;
     printf("shrinker: processing request to free %08d bytes.\n", target);
     while (thing != NULL && freed <= target) {
-        thing->prev->next = NULL;
-        tail = thing->prev;
+        head = thing->next;
         free(thing);
         freed += sizeof(struct item);
-        thing = tail;
+        thing = head;
     }
     printf("shrinker: %08d bytes of memory were freed!\n", freed);
     return freed;
