@@ -66,9 +66,7 @@ int main (int argc, int **argv) {
 
     printf("I'm a memory hog!\n");
     osv_register_shrinker("Example Shrinker", shrinker_function);
-    for(;;) {
+    for (;;) {
         hog_memory();
     }
-
-    pthread_mutex_destroy(&cache.lock);
 }
