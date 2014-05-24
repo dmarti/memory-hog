@@ -1,4 +1,4 @@
-CFLAGS = -std=gnu99 -fPIC -levent
+CFLAGS = -std=gnu99 -fPIC -levent -lpthread
 LDFLAGS = -shared 
 
 all : memory-hog.so
