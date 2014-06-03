@@ -43,6 +43,10 @@ size_t shrinker_function(size_t target, bool hard)
     size_t freed = 0;
     struct item * thing;
     printf("shrinker: processing request to free %08d bytes.\n", target);
+    if (0 == target) {
+        printf("Target is 0 bytes, all done.\n");
+        return 0;
+    }
 
     pthread_mutex_lock(&cache.lock);
     thing = cache.head;
