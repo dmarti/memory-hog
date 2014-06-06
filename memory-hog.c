@@ -18,8 +18,7 @@ struct cache_items {
 } cache;
 
 void hog_memory() {
-    struct item * thing;
-    thing = malloc(sizeof(struct item));
+    struct item * thing = malloc(sizeof(struct item));
 
     pthread_mutex_lock(&cache.lock);
     if (cache.tail) {
@@ -31,7 +30,7 @@ void hog_memory() {
     }
     pthread_mutex_unlock(&cache.lock);
 
-    printf("Oink!\n");
+    printf("program: \tOink!\n");
     sleep(1);
 }
 
@@ -41,11 +40,11 @@ size_t shrinker_function(size_t target, bool hard)
 {
     size_t freed = 0;
     struct item * thing;
-    printf("shrinker: processing request to free %08d bytes.\n", target);
     if (hard == false) {
-        printf("Soft pressure, all done.\n");
+        printf("shrinker:\tSoft pressure, all done.\n");
         return 0;
     }
+    printf("shrinker:\tprocessing request to free %08d bytes.\n", target);
 
     pthread_mutex_lock(&cache.lock);
     thing = cache.head;
@@ -56,8 +55,7 @@ size_t shrinker_function(size_t target, bool hard)
         thing = cache.head;
     }
     pthread_mutex_unlock(&cache.lock);
-
-    printf("shrinker: %08d bytes of memory were freed!\n", freed);
+    printf("\t\t%08d bytes of memory were freed!\n", freed);
     return freed;
 }
 
