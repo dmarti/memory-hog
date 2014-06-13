@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define SIZE 31337 * 4096
+#define SIZE 31337 * 1024
 
 struct item {
     char stuff[SIZE];
