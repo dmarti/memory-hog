@@ -49,6 +49,7 @@ size_t shrinker_function(size_t target, bool hard)
     pthread_mutex_lock(&cache.lock);
     if (hard == false) {
         printf("shrinker:\tSoft pressure, all done.\n");
+        pthread_mutex_unlock(&cache.lock);
         return 0;
     }
     printf("shrinker:\tprocessing request to free %08d bytes.\n", target);
@@ -60,7 +61,6 @@ size_t shrinker_function(size_t target, bool hard)
         freed += sizeof(struct item);
         thing = cache.head;
     }
-    printf("\n");
     printf("shrinker:\tfinishing with %d things.\n", thing_count(cache.head));
     printf("\t\t%08d bytes of memory were freed!\n", freed);
     pthread_mutex_unlock(&cache.lock);
