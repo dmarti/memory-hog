@@ -30,7 +30,7 @@ void hog_memory() {
     }
     printf("program: \tOink!\n");
     pthread_mutex_unlock(&cache.lock);
-    sleep(1);
+    usleep(200000);
 }
 
 int thing_count(struct item * thing) {
@@ -63,6 +63,7 @@ size_t shrinker_function(size_t target, bool hard)
     }
     printf("shrinker:\tfinishing with %d things.\n", thing_count(cache.head));
     printf("\t\t%08d bytes of memory were freed!\n", freed);
+    sleep(2);
     pthread_mutex_unlock(&cache.lock);
     return freed;
 }
