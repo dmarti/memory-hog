@@ -53,7 +53,7 @@ size_t shrinker_function(size_t target, bool hard)
         return 0;
     }
     printf("shrinker:\tprocessing request to free %08d bytes.\n", target);
-    printf("shrinker:\tstarting with %d things.\n", thing_count(cache.head));
+    printf("\t\tstarting with %d things.\n", thing_count(cache.head));
     thing = cache.head;
     while (freed <= target) {
         cache.head = thing->next;
@@ -61,7 +61,7 @@ size_t shrinker_function(size_t target, bool hard)
         freed += sizeof(struct item);
         thing = cache.head;
     }
-    printf("shrinker:\tfinishing with %d things.\n", thing_count(cache.head));
+    printf("\t\tfinishing with %d things.\n", thing_count(cache.head));
     printf("\t\t%08d bytes of memory were freed!\n", freed);
     sleep(2);
     pthread_mutex_unlock(&cache.lock);
