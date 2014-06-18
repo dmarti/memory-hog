@@ -9,13 +9,15 @@ Defining a shrinker function
 ----------------------------
 
 OSv notifies your program of a low memory situation by
-calling a shrinker function.
+calling a shrinker callback.
 
 A shrinker function takes two arguments:
 
  * target amount of memory to free (size_t)
 
  * A boolean "hard" argument.  This is false if the function is being called for preemptive freeing of memory, and true if the system is under severe pressure.
+
+In most invocations, the argument `hard` will be set by OSv to false. This indicates that the system is acting preemptively, and memory pressure is starting to build up. The application is free to defer the freeing of objects to a later stage. Having your shrinker callback called with `hard` set to true, however, means that OSv is under severe memory pressure, and may be unable to serve allocations. If not enough memory is freed, the system may be forced to abort.
 
 
 Registering
@@ -98,13 +100,13 @@ They handle specific events and may be called at any time, from your program's p
 Each cache in your program that the shrinker can release data from,
 must have its own lock to prevent concurrency issues.
 
-The memory-hog sample program uses a mutex to handle concurrency.  Another good option is to simply keep a global `free_memory_please` global variable, and set it in the shrinker callback.  Then check it in the main loop, and free memory if necessary.
+The memory-hog sample program uses a mutex to handle concurrency.  To handle soft memory pressure, where your shrinker is called with `hard` set to false, you can keep a global `free_memory_please` global variable, and set it in the shrinker callback.  Then check it in the main loop, and free memory if necessary.  However, hard memory pressure must be handled immediately, or the system may hang.
 
 
 Handling soft pressure
 ----------------------
 
-If possible, you should have your shrinker try to release some memory when called with hard=false, and free some extra memory when hard=true.  This will reduce the number of times you have to handle shrinking, and improve performance by making more free memory available to OSv for system tasks.  The memory-hog example currently ignores soft pressure.
+If possible, you should have your shrinker try to release some memory when called with `hard` set to false.  This will reduce the number of times you have to handle shrinking, and improve performance by making more free memory available to OSv for system tasks.  The memory-hog example currently ignores soft pressure.
 
 For more info on memory management and other OSv subjects, please join the [osv-dev mailing list](https://groups.google.com/forum/#!forum/osv-dev).  You can get updates on by subscribing to the [OSv blog RSS feed](http://osv.io/blog/atom.xml) or folllowing [@CloudiusSystems](https://twitter.com/CloudiusSystems) on Twitter.
 
