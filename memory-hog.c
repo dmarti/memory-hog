@@ -19,6 +19,7 @@ struct cache_items {
 
 void hog_memory() {
     struct item * thing = malloc(sizeof(struct item));
+    thing->next = NULL;
 
     pthread_mutex_lock(&cache.lock);
     if (cache.tail) {
@@ -55,7 +56,7 @@ size_t shrinker_function(size_t target, bool hard)
     printf("shrinker:\tprocessing request to free %08d bytes.\n", target);
     printf("\t\tstarting with %d things.\n", thing_count(cache.head));
     thing = cache.head;
-    while (freed <= target) {
+    while (thing && freed <= target) {
         cache.head = thing->next;
         free(thing);
         freed += sizeof(struct item);
