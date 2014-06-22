@@ -83,8 +83,8 @@ shrinker:	Soft pressure, all done.
 program: 	Oink!
 shrinker:	Soft pressure, all done.
 shrinker:	processing request to free 166062080 bytes.
-shrinker:	starting with 64 things.
-shrinker:	finishing with 58 things.
+                starting with 64 things.
+                finishing with 58 things.
 		192534576 bytes of memory were freed!
 program: 	Oink!
 shrinker:	Soft pressure, all done.
